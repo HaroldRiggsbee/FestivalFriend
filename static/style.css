@@ -1,0 +1,699 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===================== */
+/* Global — warm background with rave gradient at bottom */
+/* ===================== */
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #fff;
+    line-height: 1.6;
+    min-height: 100vh;
+    background: #2d1b0e;
+    background-attachment: fixed;
+}
+
+/* ===================== */
+/* Nav */
+/* ===================== */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.05) 40%,
+        rgba(255, 255, 255, 0.1) 70%,
+        rgba(255, 255, 255, 0.04) 100%
+    );
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #ff4081;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover { color: #00e5ff; }
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+}
+
+/* ===================== */
+/* Flash messages */
+/* ===================== */
+.flash-messages { margin-bottom: 1.5rem; }
+.flash {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    background: rgba(80, 80, 80, 0.3);
+    backdrop-filter: blur(6px);
+}
+.flash.success { background: rgba(76, 175, 80, 0.2); color: #a5d6a7; border: 1px solid rgba(76, 175, 80, 0.3); }
+.flash.error { background: rgba(244, 67, 54, 0.2); color: #ef9a9a; border: 1px solid rgba(244, 67, 54, 0.3); }
+
+/* ===================== */
+/* Home page */
+/* ===================== */
+.hero { text-align: center; margin: 3rem 0 2rem; }
+.hero h1 {
+    font-size: 2.8rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+}
+.hero p { color: rgba(255, 255, 255, 0.65); font-size: 1.1rem; font-weight: 600; letter-spacing: 0.02em; }
+
+.scrape-form { max-width: 600px; margin: 2rem auto; }
+
+/* Tabs */
+.input-tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+.tab-btn {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px 10px 0 0;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tab-btn.active {
+    background: rgba(128, 128, 128, 0.2);
+    color: #fff;
+    border-bottom-color: transparent;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Upload area */
+.upload-area {
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    margin-top: 0.5rem;
+    position: relative;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.upload-area:hover, .upload-area.dragover {
+    border-color: #ff4081;
+    background: rgba(255, 64, 129, 0.06);
+}
+.upload-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.upload-icon {
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.25);
+    line-height: 1;
+}
+.upload-preview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+.input-group { display: flex; gap: 0.5rem; }
+.input-group input {
+    flex: 1;
+    padding: 0.9rem 1.1rem;
+    background: rgba(128, 128, 128, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 600;
+}
+.input-group input::placeholder { color: rgba(255, 255, 255, 0.35); }
+.input-group input:focus { outline: none; border-color: #ff4081; box-shadow: 0 0 20px rgba(255, 64, 129, 0.2); }
+
+button, .input-group button {
+    padding: 0.9rem 1.6rem;
+    background: linear-gradient(135deg, #ff4081, #e91e63);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    letter-spacing: 0.02em;
+}
+button:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255, 64, 129, 0.35); }
+button:disabled { background: rgba(128, 128, 128, 0.2); cursor: not-allowed; transform: none; box-shadow: none; }
+
+.hint { color: rgba(255, 255, 255, 0.45); font-size: 0.85rem; margin-top: 0.5rem; text-align: center; font-weight: 600; }
+
+/* Festival history */
+.festival-history { margin-top: 3rem; }
+.festival-history h2 { margin-bottom: 1rem; font-weight: 800; letter-spacing: 0.02em; }
+.festival-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.festival-card {
+    background: rgba(128, 128, 128, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: background 0.2s, transform 0.15s;
+}
+.festival-card:hover { background: rgba(128, 128, 128, 0.22); transform: translateY(-2px); }
+.festival-card h3 { color: #fff; margin-bottom: 0.25rem; font-weight: 800; }
+.festival-card p { color: rgba(255, 255, 255, 0.55); font-weight: 600; }
+
+/* ===================== */
+/* Artists page — sidebar filter with scrollable pills */
+/* ===================== */
+.artists-page { display: flex; gap: 2rem; }
+
+.filter-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 5rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 1rem;
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+.filter-sidebar::-webkit-scrollbar { width: 4px; }
+.filter-sidebar::-webkit-scrollbar-track { background: transparent; }
+.filter-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+.filter-sidebar h3 {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.03em;
+}
+
+.filter-group { margin-bottom: 1rem; }
+
+.filter-group h4 {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+    font-weight: 800;
+}
+
+.pill-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border-radius: 14px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(128, 128, 128, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s;
+    user-select: none;
+    margin: 0.15rem 0.1rem;
+}
+
+.pill-toggle input { display: none; }
+
+.pill-toggle.genre.active {
+    background: rgba(0, 229, 255, 0.15);
+    color: #00e5ff;
+    border-color: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+}
+
+.pill-toggle.timbre.active {
+    background: rgba(224, 64, 251, 0.15);
+    color: #e040fb;
+    border-color: rgba(224, 64, 251, 0.4);
+    box-shadow: 0 0 10px rgba(224, 64, 251, 0.15);
+}
+
+.artist-grid-container { flex: 1; min-width: 0; }
+.artist-grid-container h2 {
+    margin-bottom: 1rem;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+.artist-count { color: rgba(255, 255, 255, 0.4); font-weight: 600; }
+
+.artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.artist-card {
+    background: rgba(128, 128, 128, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.artist-card:hover {
+    background: rgba(128, 128, 128, 0.25);
+    border-color: rgba(255, 64, 129, 0.4);
+    transform: translateY(-2px);
+}
+.artist-card h3 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+/* Festival page header */
+.festival-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.festival-header h2 { color: #fff; font-weight: 800; letter-spacing: 0.03em; }
+.festival-header .back-link {
+    color: #00e5ff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.4rem 0.9rem;
+    border-radius: 10px;
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    transition: background 0.2s;
+}
+.festival-header .back-link:hover { background: rgba(0, 229, 255, 0.2); }
+
+/* Pills */
+.pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.pill {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+.pill.genre { background: rgba(0, 229, 255, 0.12); color: #00e5ff; }
+.pill.timbre { background: rgba(224, 64, 251, 0.12); color: #e040fb; }
+
+/* ===================== */
+/* Artist detail */
+/* ===================== */
+.artist-detail { max-width: 700px; }
+.back-link {
+    color: #00e5ff;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.back-link:hover { text-decoration: underline; }
+.artist-detail h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+}
+.detail-section { margin-bottom: 1.5rem; }
+.detail-section h3 {
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    font-weight: 800;
+}
+.festival-appearances { list-style: none; }
+.festival-appearances li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.meta { color: rgba(255, 255, 255, 0.35); font-size: 0.85rem; font-weight: 600; }
+
+/* Similar artists */
+.similar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+.similar-card {
+    background: rgba(128, 128, 128, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.similar-card:hover {
+    background: rgba(128, 128, 128, 0.25);
+    border-color: rgba(224, 64, 251, 0.4);
+    transform: translateY(-2px);
+}
+.similar-card h4 {
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+}
+
+/* Loading state (scrape button) */
+.loading button { position: relative; }
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===================== */
+/* Loading page */
+/* ===================== */
+.loading-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 75vh;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    max-width: 650px;
+    width: 100%;
+}
+
+/* ===================== */
+/* Scrolling artist list — BOLD WIDE EPIC at top */
+/* ===================== */
+.artist-scroll-container {
+    width: 100%;
+    max-width: 500px;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 3rem;
+}
+
+.artist-scroll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-top: 170px;
+}
+
+.scroll-artist {
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0;
+    animation: fadeInUp 0.4s ease-out;
+    /* Default: full size for the newest entry; JS overrides older ones */
+    font-size: 2.0rem;
+    opacity: 1;
+    transition: opacity 0.3s, font-size 0.3s;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== */
+/* Equalizer — wide translucent bars, randomized per-band animation */
+/* ===================== */
+.equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 100px;
+    margin-bottom: 2rem;
+}
+
+.eq-bar {
+    width: 18px;
+    border-radius: 4px 4px 0 0;
+    transform-origin: bottom;
+}
+
+/* Each bar: slow, organic, song-like — varied multi-keyframe breathing */
+.eq-bar:nth-child(1)  { height: 30px; background: rgba(255, 64, 129, 0.4); animation: eq1 3.2s ease-in-out infinite 0.0s; }
+.eq-bar:nth-child(2)  { height: 55px; background: rgba(255, 50, 140, 0.4); animation: eq2 4.1s ease-in-out infinite 0.4s; }
+.eq-bar:nth-child(3)  { height: 40px; background: rgba(245, 40, 155, 0.4); animation: eq3 3.6s ease-in-out infinite 0.2s; }
+.eq-bar:nth-child(4)  { height: 72px; background: rgba(224, 64, 251, 0.4); animation: eq4 4.5s ease-in-out infinite 1.0s; }
+.eq-bar:nth-child(5)  { height: 48px; background: rgba(200, 60, 240, 0.4); animation: eq5 3.8s ease-in-out infinite 0.6s; }
+.eq-bar:nth-child(6)  { height: 88px; background: rgba(170, 55, 230, 0.4); animation: eq6 4.2s ease-in-out infinite 0.3s; }
+.eq-bar:nth-child(7)  { height: 35px; background: rgba(140, 60, 220, 0.4); animation: eq7 3.4s ease-in-out infinite 1.2s; }
+.eq-bar:nth-child(8)  { height: 65px; background: rgba(110, 70, 210, 0.4); animation: eq8 4.8s ease-in-out infinite 0.8s; }
+.eq-bar:nth-child(9)  { height: 50px; background: rgba(80, 100, 220, 0.4); animation: eq9 3.9s ease-in-out infinite 1.5s; }
+.eq-bar:nth-child(10) { height: 78px; background: rgba(50, 140, 230, 0.4); animation: eq10 4.3s ease-in-out infinite 0.5s; }
+.eq-bar:nth-child(11) { height: 42px; background: rgba(20, 170, 240, 0.4); animation: eq11 3.5s ease-in-out infinite 1.1s; }
+.eq-bar:nth-child(12) { height: 82px; background: rgba(0, 200, 250, 0.4); animation: eq12 4.6s ease-in-out infinite 0.7s; }
+.eq-bar:nth-child(13) { height: 38px; background: rgba(0, 215, 255, 0.4); animation: eq13 3.7s ease-in-out infinite 1.4s; }
+.eq-bar:nth-child(14) { height: 60px; background: rgba(0, 229, 255, 0.4); animation: eq14 4.0s ease-in-out infinite 0.9s; }
+.eq-bar:nth-child(15) { height: 28px; background: rgba(0, 229, 255, 0.35); animation: eq15 4.4s ease-in-out infinite 1.3s; }
+.eq-bar:nth-child(16) { height: 52px; background: rgba(0, 229, 255, 0.3); animation: eq16 3.3s ease-in-out infinite 0.1s; }
+
+/* Multi-step keyframes — slow rises, holds, gentle drops like a real song */
+@keyframes eq1  { 0% { transform: scaleY(0.3); } 20% { transform: scaleY(0.8); } 35% { transform: scaleY(0.5); } 60% { transform: scaleY(1.1); } 80% { transform: scaleY(0.6); } 100% { transform: scaleY(0.3); } }
+@keyframes eq2  { 0% { transform: scaleY(0.2); } 15% { transform: scaleY(0.6); } 40% { transform: scaleY(1.2); } 55% { transform: scaleY(0.7); } 75% { transform: scaleY(0.9); } 100% { transform: scaleY(0.2); } }
+@keyframes eq3  { 0% { transform: scaleY(0.4); } 25% { transform: scaleY(0.9); } 50% { transform: scaleY(0.5); } 70% { transform: scaleY(0.8); } 100% { transform: scaleY(0.4); } }
+@keyframes eq4  { 0% { transform: scaleY(0.15); } 20% { transform: scaleY(1.0); } 45% { transform: scaleY(0.6); } 65% { transform: scaleY(1.3); } 85% { transform: scaleY(0.4); } 100% { transform: scaleY(0.15); } }
+@keyframes eq5  { 0% { transform: scaleY(0.35); } 30% { transform: scaleY(0.7); } 50% { transform: scaleY(1.0); } 75% { transform: scaleY(0.5); } 100% { transform: scaleY(0.35); } }
+@keyframes eq6  { 0% { transform: scaleY(0.15); } 18% { transform: scaleY(0.9); } 38% { transform: scaleY(0.5); } 58% { transform: scaleY(1.2); } 80% { transform: scaleY(0.7); } 100% { transform: scaleY(0.15); } }
+@keyframes eq7  { 0% { transform: scaleY(0.45); } 22% { transform: scaleY(0.7); } 48% { transform: scaleY(0.3); } 70% { transform: scaleY(0.8); } 100% { transform: scaleY(0.45); } }
+@keyframes eq8  { 0% { transform: scaleY(0.2); } 15% { transform: scaleY(0.8); } 35% { transform: scaleY(1.1); } 55% { transform: scaleY(0.5); } 78% { transform: scaleY(0.9); } 100% { transform: scaleY(0.2); } }
+@keyframes eq9  { 0% { transform: scaleY(0.3); } 28% { transform: scaleY(1.0); } 50% { transform: scaleY(0.6); } 72% { transform: scaleY(0.8); } 100% { transform: scaleY(0.3); } }
+@keyframes eq10 { 0% { transform: scaleY(0.2); } 12% { transform: scaleY(0.7); } 32% { transform: scaleY(1.3); } 52% { transform: scaleY(0.6); } 75% { transform: scaleY(1.0); } 100% { transform: scaleY(0.2); } }
+@keyframes eq11 { 0% { transform: scaleY(0.4); } 25% { transform: scaleY(0.6); } 45% { transform: scaleY(0.9); } 68% { transform: scaleY(0.4); } 100% { transform: scaleY(0.4); } }
+@keyframes eq12 { 0% { transform: scaleY(0.15); } 20% { transform: scaleY(1.1); } 40% { transform: scaleY(0.7); } 60% { transform: scaleY(1.25); } 82% { transform: scaleY(0.5); } 100% { transform: scaleY(0.15); } }
+@keyframes eq13 { 0% { transform: scaleY(0.5); } 30% { transform: scaleY(0.7); } 55% { transform: scaleY(0.3); } 80% { transform: scaleY(0.6); } 100% { transform: scaleY(0.5); } }
+@keyframes eq14 { 0% { transform: scaleY(0.2); } 18% { transform: scaleY(0.9); } 42% { transform: scaleY(0.5); } 65% { transform: scaleY(1.1); } 85% { transform: scaleY(0.4); } 100% { transform: scaleY(0.2); } }
+@keyframes eq15 { 0% { transform: scaleY(0.35); } 25% { transform: scaleY(0.6); } 50% { transform: scaleY(0.9); } 75% { transform: scaleY(0.5); } 100% { transform: scaleY(0.35); } }
+@keyframes eq16 { 0% { transform: scaleY(0.25); } 22% { transform: scaleY(1.0); } 45% { transform: scaleY(0.6); } 68% { transform: scaleY(0.8); } 88% { transform: scaleY(0.35); } 100% { transform: scaleY(0.25); } }
+
+/* Dynamic title text */
+.loading-title {
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: opacity 0.3s;
+}
+
+/* Counter */
+.loading-counter {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* ===================== */
+/* Pioneer DJM-style crossfader — taller */
+/* ===================== */
+.djm-fader {
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 1.5rem;
+}
+
+.fader-plate {
+    background: linear-gradient(180deg, #2a2a2a, #1a1a1a, #222);
+    border-radius: 10px;
+    padding: 14px 20px 40px;
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid #3a3a3a;
+    overflow: visible;
+}
+
+/* Tick marks */
+.fader-ticks {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 12px;
+    margin-bottom: 6px;
+}
+
+.fader-ticks .tick {
+    display: block;
+    width: 1px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.fader-ticks .tick.tall {
+    height: 16px;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+/* Recessed slot */
+.fader-slot {
+    position: relative;
+    height: 10px;
+    background: #0a0a0a;
+    border-radius: 5px;
+    box-shadow:
+        inset 0 2px 5px rgba(0, 0, 0, 0.8),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.5),
+        0 1px 0 rgba(255, 255, 255, 0.03);
+    margin: 0 12px;
+}
+
+/* Fader cap — taller Pioneer-style */
+.fader-cap {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 58px;
+    border-radius: 3px;
+    background: linear-gradient(
+        90deg,
+        #555 0%,
+        #888 15%,
+        #ccc 30%,
+        #eee 48%,
+        #fff 50%,
+        #eee 52%,
+        #ccc 70%,
+        #888 85%,
+        #555 100%
+    );
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.7),
+        0 0 1px rgba(0, 0, 0, 0.9),
+        inset 0 0 2px rgba(255, 255, 255, 0.15);
+    transition: left 0.5s ease;
+}
+
+/* Grip lines */
+.fader-cap::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 4px;
+    right: 4px;
+    bottom: 10px;
+    background: repeating-linear-gradient(
+        180deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.18) 2px,
+        rgba(0, 0, 0, 0.18) 3px
+    );
+    border-radius: 1px;
+}
+
+/* Center notch */
+.fader-cap::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    right: 2px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    transform: translateY(-50%);
+    border-radius: 1px;
+}
+
+/* Hint */
+.loading-hint {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+/* ===================== */
+/* Responsive */
+/* ===================== */
+@media (max-width: 768px) {
+    .artists-page { flex-direction: column; }
+    .filter-sidebar { width: 100%; position: static; max-height: 200px; }
+    .artist-grid { grid-template-columns: 1fr; }
+    main { padding: 1rem; }
+    .equalizer { gap: 3px; }
+    .eq-bar { width: 12px; }
+    .scroll-artist { font-size: 1.3rem; }
+}

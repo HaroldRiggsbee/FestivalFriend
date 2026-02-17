@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ festival_name }} - FestivalFriend{% endblock %}
+{% block content %}
+<div class="artists-page">
+    <aside class="filter-sidebar" id="filter-sidebar">
+        <h3>Filter</h3>
+        {% if all_genres %}
+        <div class="filter-group">
+            <h4>Genres</h4>
+            {% for genre in all_genres %}
+            <label class="pill-toggle genre">
+                <input type="checkbox" class="filter-genre" value="{{ genre }}">
+                {{ genre }}
+            </label>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if all_timbres %}
+        <div class="filter-group">
+            <h4>Vibe</h4>
+            {% for timbre in all_timbres %}
+            <label class="pill-toggle timbre">
+                <input type="checkbox" class="filter-timbre" value="{{ timbre }}">
+                {{ timbre }}
+            </label>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </aside>
+
+    <section class="artist-grid-container">
+        <div class="festival-header">
+            <h2>{{ festival_name }} <span class="artist-count" id="artist-count">({{ artists|length }})</span></h2>
+            <a href="{{ url_for('artists') }}" class="back-link">View All Artists</a>
+        </div>
+        <div class="artist-grid" id="artist-grid">
+            {% for artist in artists %}
+            <a href="{{ url_for('artist_detail', name=artist.name|lower) }}"
+               class="artist-card"
+               data-genres="{{ artist.genres|join(',') }}"
+               data-timbre="{{ artist.timbre|join(',') }}">
+                <h3>{{ artist.name }}</h3>
+                <div class="pills">
+                    {% for g in artist.genres %}
+                    <span class="pill genre">{{ g }}</span>
+                    {% endfor %}
+                    {% for t in artist.timbre %}
+                    <span class="pill timbre">{{ t }}</span>
+                    {% endfor %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

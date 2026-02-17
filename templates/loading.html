@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block title %}Classifying Artists - FestivalFriend{% endblock %}
+
+{% block content %}
+<div class="loading-page">
+    <div class="loading-content">
+
+        <!-- Scrolling artist names — top -->
+        <div class="artist-scroll-container" id="artistScrollContainer">
+            <div class="artist-scroll-list" id="artistScrollList"></div>
+        </div>
+
+        <!-- EQ bars -->
+        <div class="equalizer">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+        </div>
+
+        <!-- Dynamic fun text / scan status -->
+        <h1 class="loading-title" id="funMessage">Analyzing vibes...</h1>
+
+        <!-- Counter (only visible during classification) -->
+        <div class="loading-counter" id="counter"></div>
+
+        <!-- Pioneer DJM-style crossfader -->
+        <div class="djm-fader" id="faderSection">
+            <div class="fader-plate">
+                <div class="fader-ticks">
+                    <span class="tick"></span>
+                    <span class="tick"></span>
+                    <span class="tick tall"></span>
+                    <span class="tick"></span>
+                    <span class="tick"></span>
+                    <span class="tick tall"></span>
+                    <span class="tick"></span>
+                    <span class="tick"></span>
+                    <span class="tick tall"></span>
+                    <span class="tick"></span>
+                    <span class="tick"></span>
+                    <span class="tick tall"></span>
+                    <span class="tick"></span>
+                    <span class="tick"></span>
+                    <span class="tick tall"></span>
+                    <span class="tick"></span>
+                    <span class="tick"></span>
+                </div>
+                <div class="fader-slot">
+                    <div class="fader-cap" id="faderCap"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-hint" id="loadingHint">Classifying artists via MusicBrainz</div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var jobId = "{{ job_id }}";
+    var festivalName = "{{ job.festival_name }}";
+    var funMessages = [
+        "Analyzing vibes...",
+        "Mapping genres...",
+        "Feeling the bass...",
+        "Reading the room...",
+        "Consulting the DJ...",
+        "Tuning in...",
+        "Decoding rhythms...",
+        "Scanning frequencies...",
+        "Sorting the setlist...",
+        "Syncing the beat..."
+    ];
+    var scanMessages = [
+        "Reading the poster...",
+        "Scanning for names...",
+        "Deciphering the lineup...",
+        "Zooming in...",
+        "Extracting text...",
+        "Identifying artists..."
+    ];
+    var msgIndex = 0;
+    var currentPhase = "{{ job.get('phase', 'classifying') }}";
+    var scrollList = document.getElementById("artistScrollList");
+    var scrollContainer = document.getElementById("artistScrollContainer");
+    var funMessage = document.getElementById("funMessage");
+    var counter = document.getElementById("counter");
+    var faderCap = document.getElementById("faderCap");
+    var loadingHint = document.getElementById("loadingHint");
+
+    // Rotate fun messages every 3s
+    var msgInterval = setInterval(function() {
+        msgIndex = (msgIndex + 1) % funMessages.length;
+        // Only rotate fun messages during classifying phase
+        if (currentPhase === "classifying") {
+            funMessage.textContent = funMessages[msgIndex];
+        }
+    }, 3000);
+
+    // During scanning phase, rotate scan messages if no scan_status from server
+    var scanMsgIndex = 0;
+    var scanInterval = setInterval(function() {
+        if (currentPhase === "scanning") {
+            scanMsgIndex = (scanMsgIndex + 1) % scanMessages.length;
+        }
+    }, 2500);
+
+    function styleScrollEntries() {
+        var items = scrollList.querySelectorAll(".scroll-artist");
+        var count = items.length;
+        for (var i = 0; i < count; i++) {
+            var age = count - 1 - i;
+            var opacity, size;
+            if (age === 0) {
+                opacity = 1;
+                size = 2.0;
+            } else if (age === 1) {
+                opacity = 0.5;
+                size = 1.3;
+            } else if (age === 2) {
+                opacity = 0.3;
+                size = 1.05;
+            } else if (age === 3) {
+                opacity = 0.18;
+                size = 0.85;
+            } else if (age === 4) {
+                opacity = 0.1;
+                size = 0.72;
+            } else {
+                opacity = 0.05;
+                size = 0.62;
+            }
+            items[i].style.opacity = opacity;
+            items[i].style.fontSize = size + "rem";
+        }
+    }
+
+    function addArtistToScroll(name) {
+        if (!name) return;
+        var items = scrollList.querySelectorAll(".scroll-artist");
+        if (items.length > 0 && items[items.length - 1].textContent === name) return;
+
+        var el = document.createElement("div");
+        el.className = "scroll-artist";
+        el.textContent = name;
+        scrollList.appendChild(el);
+        styleScrollEntries();
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
+
+    function poll() {
+        fetch("/api/job/" + jobId)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                currentPhase = data.phase || "classifying";
+
+                if (currentPhase === "scanning") {
+                    // Brief OCR phase — just show rotating scan messages
+                    funMessage.textContent = scanMessages[scanMsgIndex];
+                    counter.textContent = "";
+                    faderCap.style.left = "0%";
+                    loadingHint.textContent = "Scanning poster for artist names...";
+
+                } else if (currentPhase === "classifying") {
+                    // Classification phase: artist scroll + fader + counter
+                    loadingHint.textContent = "Classifying artists via MusicBrainz";
+
+                    var pct = data.total > 0 ? Math.round((data.done / data.total) * 100) : 0;
+                    faderCap.style.left = pct + "%";
+
+                    if (data.total > 0) {
+                        counter.textContent = "Artist " + data.done + " of " + data.total;
+                    } else {
+                        counter.textContent = "";
+                    }
+
+                    // Only show validated artist names in the scroll
+                    if (data.current_artist) {
+                        addArtistToScroll(data.current_artist);
+                    }
+                }
+
+                if (data.status === "done") {
+                    funMessage.textContent = "All done!";
+                    faderCap.style.left = "100%";
+                    counter.textContent = data.artist_count + " artists classified";
+                    clearInterval(msgInterval);
+                    clearInterval(scanInterval);
+                    setTimeout(function() {
+                        window.location.href = "/festival/" + encodeURIComponent(data.festival_name || festivalName);
+                    }, 800);
+                } else if (data.status === "error") {
+                    funMessage.textContent = data.error || "Something went wrong...";
+                    clearInterval(msgInterval);
+                    clearInterval(scanInterval);
+                } else {
+                    setTimeout(poll, 1500);
+                }
+            })
+            .catch(function() {
+                setTimeout(poll, 2000);
+            });
+    }
+
+    poll();
+})();
+</script>
+{% endblock %}

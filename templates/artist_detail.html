@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ artist.name }} - FestivalFriend{% endblock %}
+{% block content %}
+<section class="artist-detail">
+    <a href="{{ url_for('artists') }}" class="back-link">Back to all artists</a>
+    <h1>{{ artist.name }}</h1>
+
+    <div class="detail-section">
+        <h3>Genres</h3>
+        <div class="pills">
+            {% for g in artist.genres %}
+            <span class="pill genre">{{ g }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="detail-section">
+        <h3>Vibe / Timbre</h3>
+        <div class="pills">
+            {% for t in artist.timbre %}
+            <span class="pill timbre">{{ t }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="detail-section">
+        <h3>Festival Appearances</h3>
+        <ul class="festival-appearances">
+            {% for fest in artist.festivals %}
+            <li>
+                <strong>{{ fest.name }}</strong>
+                <span class="meta">Scraped: {{ fest.date_scraped[:10] }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <p class="meta">First seen: {{ artist.first_seen[:10] }} | Last updated: {{ artist.last_updated[:10] }}</p>
+
+    {% if similar %}
+    <div class="detail-section similar-artists">
+        <h3>Similar Artists</h3>
+        <div class="similar-grid">
+            {% for s in similar %}
+            <a href="{{ url_for('artist_detail', name=s.name) }}" class="similar-card">
+                <h4>{{ s.name }}</h4>
+                <div class="pills">
+                    {% for g in s.genres[:3] %}
+                    <span class="pill genre">{{ g }}</span>
+                    {% endfor %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

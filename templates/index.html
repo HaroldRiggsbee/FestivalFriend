@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}FestivalFriend - Home{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Discover Festival Artists</h1>
+    <p>Extract and classify artists by genre and vibe from any festival lineup.</p>
+</section>
+
+<section class="scrape-form">
+    <div class="input-tabs">
+        <button class="tab-btn active" data-tab="url-tab" type="button">Paste URL</button>
+        <button class="tab-btn" data-tab="image-tab" type="button">Upload Poster</button>
+    </div>
+
+    <div class="tab-panel active" id="url-tab">
+        <form action="{{ url_for('scrape') }}" method="post" id="scrape-form">
+            <div class="input-group">
+                <input type="url" name="url" placeholder="https://example.com/festival-lineup" required>
+                <button type="submit" id="scrape-btn">Scrape Lineup</button>
+            </div>
+            <p class="hint">Scrapes the page for artist names and classifies each one.</p>
+        </form>
+    </div>
+
+    <div class="tab-panel" id="image-tab">
+        <form action="{{ url_for('upload_lineup') }}" method="post" enctype="multipart/form-data" id="upload-form">
+            <div class="input-group">
+                <input type="text" name="festival_name" placeholder="Festival name" required>
+            </div>
+            <div class="upload-area" id="uploadArea">
+                <input type="file" name="image_file" id="imageFile" accept="image/*" hidden>
+                <div class="upload-prompt" id="uploadPrompt">
+                    <span class="upload-icon">+</span>
+                    <span>Drop a lineup poster or click to browse</span>
+                </div>
+                <img class="upload-preview" id="uploadPreview" hidden>
+            </div>
+            <div class="input-group" style="margin-top: 0.5rem;">
+                <input type="url" name="image_url" placeholder="...or paste an image URL">
+            </div>
+            <button type="submit" id="upload-btn" style="width: 100%; margin-top: 0.75rem;">Extract Artists</button>
+            <p class="hint">Uses OCR to read artist names from lineup poster images.</p>
+        </form>
+    </div>
+</section>
+
+{% if festivals %}
+<section class="festival-history">
+    <h2>Scraped Festivals</h2>
+    <div class="festival-list">
+        {% for fest in festivals %}
+        <div class="festival-card">
+            <h3>{{ fest.name }}</h3>
+            <p>{{ fest.artist_count }} artists</p>
+            <p class="meta">Scraped: {{ fest.date_scraped[:10] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
