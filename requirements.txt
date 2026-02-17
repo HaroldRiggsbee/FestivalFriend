@@ -4,5 +4,5 @@ requests==2.32.3
 python-dotenv==1.0.1
 Pillow>=9.0.0
 easyocr>=1.6.0
-readability-lxml>=0.9
+readability-lxml>=0.8.1
 gunicorn>=21.2.0
